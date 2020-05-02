@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link href="/css/cart.css" th:href="@{/css/cart.css}" rel="stylesheet" />
+<title>Smiley Dog</title>
+</head>
+<body>
+
+<header>
+	<div th:insert="fragments/page_header::pageHeader"></div>
+</header>
+
+<main>
+        
+    <div class="cartForm">
+            
+        <h2>カート</h2>
+        	
+        <!-- カート情報が無い場合 -->
+        <div class="noData" th:if="${carts == null || carts.size() == 0}">		<!-- size()でリスト(テーブルのレコード数)の個数を算出する -->
+        	<p class="info">カート情報はありません。</p>
+        </div>
+        	
+        <!-- カート情報がある場合 -->
+		<table id="cartTable" th:if="${carts != null && carts.size() > 0}">
+       
+            <tr>
+                <th>選択</th>
+               	<th>画像</th>
+                <th>商品名</th>
+                <th>価格(円)</th>
+                <th>個数</th>
+                <th>小計(円)</th>
+            </tr>
+            
+            <!-- 変数の値をタグ内に埋め込む場合、${}を用いる。tdタグ内の変数は、全てCartDtoのフィールで設定されている。 -->
+            <!-- th:each= "コレクション内にある要素の変数名 : ${コレクションの変数名}"  th:eachで繰り返し。 -->
+            
+            <tr th:each="cart: ${carts}">
+                <td><input type="checkbox" class="checkList" name="id" th:value="${cart.id}" /></td>			
+                <td><img class="image" th:src="@{{imagePath} (imagePath=${cart.imageFullPath}) }" /></td>		<!-- @{}はリンク式 -->
+                <td class="name" th:text="${cart.productName}" />
+                <td class="price"th:text="${cart.price}" />
+                <td class="productCount number" th:text="${cart.productCount}" />
+  	            <td class ="subtotal number"  th:text="${cart.subtotal}" /> 
+            </tr>
+              
+            <tr>
+            	<td class="totalArea b1" ></td>
+            	<td class="totalArea b2" ></td>
+                <td class="totalArea b3">合計(円)</td>
+                <td class="totalArea b4" style="border-right-style: hidden"></td>
+                <td class="totalArea" style="border-right-style: hidden" id="totalCount"></td>
+	            <td class="totalArea"  id="totalPrice"></td>
+            </tr>
+            
+		</table>
+                
+        <div class="buttonArea"  th:if="${carts != null && carts.size() > 0}">
+        	
+       	 	<button class="delete" id="deleteButton" disabled>削除</button>
+        	
+        	<form action="/smile/settlement/">
+        		<button type="submit" id="purchaseButton">購入</button>
+       	 	</form>
+       
+        </div>
+                
+    </div>
+  
+</main>
+
+<script th:inline="javascript">
+
+$(() => {
+	
+	calcTotalArea();
+	
+	$('#deleteButton').on('click', () => {
+		
+		let checkedList = $('.checkList:checked');
+		let checkedIdList = [];
+		
+		for (checked of checkedList) {
+			checkedIdList.push($(checked).val());
+		}
+		deleteCart(checkedList, checkedIdList);
+	});
+
+	$('.checkList').on('change', changeDisable);
+	
+	$('#purchaseButton').on('click', function() {
+		
+		let userId = [[${loginSession.getUserId()}]];
+		
+		if (userId == 0 && isEmpty($('#hiddenUserName').val())) {
+			alert("ログインしてください。");
+			
+			return false;
+		}
+	});
+	
+});
+
+function deleteCart(checkedList, checkedIdList) {
+	$.ajax({
+    type: 'POST',
+    url: '/smile/cart/delete',
+    data: JSON.stringify({'checkedIdList': checkedIdList}),
+    datatype: 'json',
+    contentType: 'application/json',
+  })
+  .then((result) => {
+		for (checked of checkedList) {
+			$(checked).parent().parent().remove();
+		}
+		
+		let checkList = $('.checkList');
+		
+		if (checkList.length == 0) {
+			location.replace('/smile/cart/');
+		}
+		
+		calcTotalArea();
+		
+		changeDisable();	//カート削除後に削除ボタン非活性にする
+  }, () => {
+	  alert('Error: ajax connection failed.');
+  });	  
+}
+
+let changeDisable = (event) => {
+	
+	let checkList = $('.checkList');
+	let disabled = true;
+	
+	for (let check of checkList) {
+		if($(check).prop('checked')) {
+			disabled = false;
+			break;
+		}
+	}
+	$("#deleteButton").prop("disabled", disabled);
+}
+
+function calcTotalArea() {
+	
+	let subtotalList = $('.subtotal');
+	let countList = $('.productCount');
+	let totalPrice = 0;
+	let totalCount = 0;
+	
+	$(subtotalList).each((i, subtotal) => {
+		totalPrice += parseInt($(subtotal).text());
+		totalCount += parseInt($(countList[i]).text());
+	});
+
+	$('#totalPrice').text(totalPrice);
+	$('#totalCount').text(totalCount);
+	
+}
+
+</script>
+
+</body>
+    
+</html>

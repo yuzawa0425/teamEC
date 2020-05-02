@@ -1,0 +1,119 @@
+body {
+	background: linear-gradient(to bottom, #b6fbff ,#83a4d4)fixed;
+	background-color: #83a4d4;
+    color: #D2B48C;
+}
+
+.info {
+	text-align: center;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+h3 {
+    text-align: center;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #D2B48C
+}
+
+.settlementForm {
+    margin-top: 2%;
+    margin-right: 10%;
+    margin-left: 10%;
+    width: 80%;
+    background-color:white;
+    border-radius: 20px;
+    padding-top: 10px;
+}
+
+table {
+	width: 80%;
+	margin: 0 auto;
+    border-collapse: collapse;
+}
+
+table td, table th {
+    border: 1px solid #D2B48C;
+}
+
+#settlementTable th {
+    background: antiquewhite;
+    color: #D2B48C;
+}
+
+#settlementTable tr th:nth-child(1) {
+    width: 8%;
+}
+
+#settlementTable tr th:nth-child(2) {
+    width: 20%;
+}
+
+#settlementTable tr th:nth-child(3) {
+    width: 35%;
+}
+
+#settlementTable tr th:nth-child(4) {
+    width: 20%;
+}
+
+#settlementTable tr td:nth-child(1) {
+    padding: 5px;
+    text-align: center;
+}
+
+#settlementTable tr td:nth-child(2) {
+    padding: 0 5px;
+    text-align: center;
+}
+
+#settlementTable tr td:nth-child(3) {
+    padding: 0 5px;
+    text-align: center;
+}
+
+#settlementTable tr td:nth-child(4) {
+    text-align: center;
+}
+
+/* 削除ボタン */
+
+#deleteButton {
+	float: left;
+    width: 100px;
+    margin-left: 58.5%;
+    margin-right: 2%;
+}
+
+/* 新規宛先ボタン 宛先レコードあり*/
+
+#destination {
+	float: left;
+    width: 100px;
+    margin-right: 2%;
+}
+
+/* 新規宛先ボタン 宛先レコードなし*/
+
+#destinationNone {
+	margin-left: 73%;
+	margin-bottom: 2%;
+	width: 100px;
+}
+
+/* 決済ボタン */
+
+#settlementButton {
+    width: 100px;
+}
+
+.buttonArea {
+	margin-top: 2%;
+	padding-bottom: 2%;
+}

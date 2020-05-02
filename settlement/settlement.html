@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link href="/css/settlement.css" th:href="@{/css/settlement.css}" rel="stylesheet" />
+<title>Smiley Dog</title>
+</head>
+<body>
+
+<header>
+   <div th:insert="fragments/page_header::pageHeader"></div>
+</header>
+  
+<main>
+        
+    <div class="settlementForm">
+    
+    	<!-- 宛先情報が無い場合 -->
+    	<div class="noData" th:if="${settlements == null || settlements.size() == 0}">
+    	
+        	<p class="info"> 宛先情報がありません。新規登録してください。</p>
+        	
+        	<form action="/smile/destination/">
+        		<button type="submit" id="destinationNone" >新規宛先</button>	
+        	</form>
+       
+        </div>
+        
+        <!-- 宛先情報がある場合 -->
+        <h2 th:if="${settlements != null && settlements.size() > 0}">宛先を選択し、決済を完了します。</h2>
+        <h3 th:if="${settlements != null && settlements.size() > 0}">宛先の新規登録、削除も可能です。</h3>
+        
+        <table id="settlementTable" th:if="${settlements != null && settlements.size() > 0}">
+
+			<tr>
+				<th>選択</th>
+                <th>宛先氏名</th>
+                <th>住所</th>
+                <th>電話番号</th>
+            </tr>
+            
+            <tr th:each="settlement, st: ${settlements}">
+                <td><input type="radio" class="radio" name="id" th:checked="${st.index==0}" th:value="${settlement.id}" /></td>
+                <td>
+                	<span th:text="${settlement.familyName}"></span><span>  </span><span th:text="${settlement.firstName}"></span>
+                </td>
+                <td th:text="${settlement.address}" />
+                <td th:text="${settlement.telNumber}" />
+            </tr>
+            
+        </table>
+           
+        <div class="buttonArea" th:if="${settlements != null && settlements.size() > 0}"> 
+       	 	
+			<button id="deleteButton">削除</button>			<!-- ページ移動なし -->
+        	
+			<form action="/smile/destination/">
+        		<button type="submit" id="destination">新規宛先</button>	<!-- destination.htmlに移動 -->
+        	</form>
+        	
+       		<button id="settlementButton">決済</button>  		<!-- purchase_history.htmlに移動　宛先情報IDを送る -->
+
+        </div>
+        
+    </div>
+  
+</main>
+
+<script>
+
+/* 	〇削除機能
+*	
+*	削除ボタン押下時、選択された宛先情報をDBの宛先情報マスタテーブルから削除する
+*	（mst_destination.statusを0にし、無効とする)
+*/
+	
+$(() => {
+	$('#deleteButton').on('click', () => {
+		let checked = $('.radio:checked');
+		let destinationId = $(checked).val();
+		deleteDestination(destinationId, checked);
+	});
+	
+/*	〇決済機能
+*
+*	決済ボタン押下時、購入履歴テーブルに商品ごとの決済情報を登録
+*	登録後、ユーザーに紐づくカート情報テーブルの情報を削除
+*	削除後、商品購入履歴画面に遷移する
+*/	
+	
+	$('#settlementButton').on('click', () => {
+		let checked = $('.radio:checked');
+		let destinationId = $(checked).val();
+		settlement(destinationId);
+	});
+});
+	
+function deleteDestination(destinationId, checked) {
+	$.ajax({
+	   type: 'POST',
+	   url: '/smile/destination/delete',
+	   data: JSON.stringify({'destinationId': destinationId}),
+	   datatype: 'json',
+	   contentType: 'application/json',
+	 })
+	 .then((result) => {
+	   $(checked).parent().parent().remove();
+	   let radioList = $('.radio');
+	   if (radioList.length == 0) {
+	   		location.replace('/smile/settlement/');
+	   }
+	   radioList[0].checked = true;		//宛先情報を削除した後に1番上の宛先情報が選択される
+	 }, () => {
+		  alert('Error: ajax connection failed.');
+	 });
+}
+
+</script>
+    
+</body>
+    
+</html>

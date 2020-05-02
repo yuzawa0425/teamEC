@@ -1,0 +1,144 @@
+body {
+	background: linear-gradient(to bottom, #b6fbff ,#83a4d4)fixed;
+	background-color: #83a4d4;
+    color: #D2B48C;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.info {
+	text-align: center;
+	padding-bottom: 30%;
+}
+
+.cartForm {
+	width: 80%;
+    margin-top: 2%;
+    margin-right: 10%;
+    margin-left: 10%;
+    background-color: white;
+    border-radius: 20px;
+    padding-top: 15px;
+}
+
+table {
+	width: 80%;
+    margin: 0 auto;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+table td, table th {
+    border: 1px solid #D2B48C;
+}
+
+/* カートリスト上部分 */
+
+#cartTable th {
+    background: antiquewhite;
+    color: #D2B48C;
+}
+
+#cartTable tr th:nth-child(1) {
+    width: 8%;
+}
+
+#cartTable tr th:nth-child(2) {
+    width: 15%;
+}
+
+#cartTable tr th:nth-child(3) {
+    width: 30%;
+}
+
+#cartTable tr th:nth-child(4) {
+    width: 20%;
+}
+
+#cartTable tr th:nth-child(5) {
+    width: 10%;
+}
+
+#cartTable tr th:nth-child(6) {
+    width: 20%;
+}
+
+/* カートリストのレコード部分と合計欄のスタイル */
+
+#cartTable tr td:nth-child(1) {
+	padding: 0 5px;
+	text-align: center;
+}
+
+#cartTable tr td:nth-child(2) {
+    text-align: center;   
+}
+
+#cartTable tr td:nth-child(3) {
+    padding: 0 5px;
+    text-align: center;
+}
+
+#cartTable tr td:nth-child(4) {
+    text-align: right;
+}
+
+#cartTable tr td:nth-child(5) {
+    text-align: right;
+}
+
+#cartTable tr td:nth-child(6) {
+    text-align: right;
+}
+
+.image {
+	width: 60px;
+	height: 60px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/* 削除ボタン */
+
+#deleteButton  {
+	width: 100px;
+	margin-left: 70%;
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+/* 購入ボタン */
+
+.buttonArea form {
+	float: right;
+	margin-right: 10%;
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+#purchaseButton {
+	width: 100px;
+}
+
+.totalArea{
+	border-top: 3px solid #D2B48C;
+}
+
+.b1{
+	border-right-style: none;
+}
+.b2{
+	border-left-style: none;
+	border-right-style: none;
+}
+.b3{
+	border-left-style: none;
+	border-right-style: none;
+}
+.b4{
+	border-left-style: none;
+}
